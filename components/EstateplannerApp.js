@@ -17,19 +17,35 @@ const EstateplannerApp = () => {
     currentPhotoUrl: ''
   });
 
-  // Format number with commas while typing
+  // Format number with commas and decimal points
   const formatNumberWithCommas = (value) => {
-    const numericValue = value.replace(/[^0-9]/g, '');
-    return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    // Remove all characters except numbers and decimal point
+    const cleanValue = value.replace(/[^0-9.]/g, '');
+    
+    // Ensure only one decimal point exists
+    const parts = cleanValue.split('.');
+    const wholePart = parts[0];
+    const decimalPart = parts.length > 1 ? '.' + parts[1].slice(0, 2) : '';
+
+    // Add commas to the whole number part
+    const wholeWithCommas = wholePart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    
+    return wholeWithCommas + decimalPart;
   };
 
   const handleAddItem = () => {
     if (currentItem.description && currentItem.value) {
-      const numericValue = currentItem.value.replace(/[^0-9]/g, '');
+      // Include current photo URL if it exists
+      const photos = currentItem.currentPhotoUrl 
+        ? [...currentItem.photos, currentItem.currentPhotoUrl]
+        : currentItem.photos;
+        
+      const cleanValue = currentItem.value.replace(/,/g, '');
+      
       if (editingId) {
         setItems(items.map(item => 
           item.id === editingId ? 
-          { ...item, ...currentItem, value: numericValue } : 
+          { ...item, ...currentItem, value: cleanValue, photos } : 
           item
         ));
         setEditingId(null);
@@ -37,7 +53,8 @@ const EstateplannerApp = () => {
         setItems([...items, { 
           ...currentItem, 
           id: Date.now(),
-          value: numericValue,
+          value: cleanValue,
+          photos,
           dateAdded: new Date().toLocaleDateString() 
         }]);
       }
@@ -163,45 +180,47 @@ const EstateplannerApp = () => {
                 />
                 
                 <div className="space-y-2">
-                  <input
-                    type="url"
-                    placeholder="Photo URL (e.g., from Google Drive, Dropbox)"
-                    value={currentItem.currentPhotoUrl || ''}
-                    onChange={(e) => setCurrentItem({
-                      ...currentItem,
-                      currentPhotoUrl: e.target.value
-                    })}
-                    className="w-full px-3 py-2 border rounded-md"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (currentItem.currentPhotoUrl) {
-                        setCurrentItem({
-                          ...currentItem,
-                          photos: [...currentItem.photos, currentItem.currentPhotoUrl],
-                          currentPhotoUrl: ''
-                        });
-                      }
-                    }}
-                    className="w-full px-4 py-2 border rounded-md bg-white hover:bg-gray-50"
-                  >
-                    <PlusCircle className="inline-block mr-2 h-4 w-4" />
-                    Add Photo Link
-                  </button>
+                  <div className="flex gap-2">
+                    <input
+                      type="url"
+                      placeholder="Photo URL (e.g., from Google Drive, Dropbox)"
+                      value={currentItem.currentPhotoUrl || ''}
+                      onChange={(e) => setCurrentItem({
+                        ...currentItem,
+                        currentPhotoUrl: e.target.value
+                      })}
+                      className="flex-1 px-3 py-2 border rounded-md"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (currentItem.currentPhotoUrl) {
+                          setCurrentItem({
+                            ...currentItem,
+                            photos: [...currentItem.photos, currentItem.currentPhotoUrl],
+                            currentPhotoUrl: ''
+                          });
+                        }
+                      }}
+                      disabled={!currentItem.currentPhotoUrl}
+                      className="px-4 py-2 border rounded-md bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <PlusCircle className="inline-block h-4 w-4" />
+                    </button>
+                  </div>
                   {currentItem.photos.length > 0 && (
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-600 mb-2">Added Photos:</p>
-                      <div className="space-y-1">
+                    <div className="mt-2 border rounded-md p-3 bg-white">
+                      <p className="text-sm font-medium text-gray-700 mb-2">Added Photo Links:</p>
+                      <div className="space-y-2">
                         {currentItem.photos.map((url, index) => (
-                          <div key={index} className="flex items-center justify-between bg-white p-2 rounded">
+                          <div key={index} className="flex items-center justify-between p-2 rounded border bg-gray-50">
                             <a
                               href={url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-blue-500 hover:underline truncate"
+                              className="text-blue-500 hover:underline truncate flex-1 text-sm"
                             >
-                              Photo {index + 1}
+                              {url}
                             </a>
                             <button
                               onClick={() => {
@@ -210,7 +229,7 @@ const EstateplannerApp = () => {
                                   photos: currentItem.photos.filter((_, i) => i !== index)
                                 });
                               }}
-                              className="text-red-500 hover:bg-red-50 p-1 rounded"
+                              className="text-red-500 hover:bg-red-50 p-1 rounded ml-2"
                             >
                               <Trash2 className="h-4 w-4" />
                             </button>
@@ -289,7 +308,7 @@ const EstateplannerApp = () => {
                         )}
                         {item.photos.length > 0 && (
                           <div className="mt-2">
-                            <div className="text-xs text-gray-500">Photo URLs:</div>
+                            <div className="text-xs text-gray-500">Photo Links:</div>
                             <div className="mt-1 space-y-1">
                               {item.photos.map((url, index) => (
                                 <a
@@ -297,9 +316,9 @@ const EstateplannerApp = () => {
                                   href={url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="block text-xs text-blue-500 hover:underline truncate"
+                                  className="block text-xs text-blue-500 hover:underline"
                                 >
-                                  Photo {index + 1}
+                                  {url}
                                 </a>
                               ))}
                             </div>
