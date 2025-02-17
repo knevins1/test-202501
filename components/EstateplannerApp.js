@@ -19,23 +19,16 @@ const EstateplannerApp = () => {
 
   // Format number with commas and decimal points
   const formatNumberWithCommas = (value) => {
-    // Remove all characters except numbers and decimal point
     const cleanValue = value.replace(/[^0-9.]/g, '');
-    
-    // Ensure only one decimal point exists
     const parts = cleanValue.split('.');
     const wholePart = parts[0];
     const decimalPart = parts.length > 1 ? '.' + parts[1].slice(0, 2) : '';
-
-    // Add commas to the whole number part
     const wholeWithCommas = wholePart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    
     return wholeWithCommas + decimalPart;
   };
 
   const handleAddItem = () => {
     if (currentItem.description && currentItem.value) {
-      // Include current photo URL if it exists
       const photos = currentItem.currentPhotoUrl 
         ? [...currentItem.photos, currentItem.currentPhotoUrl]
         : currentItem.photos;
@@ -122,74 +115,89 @@ const EstateplannerApp = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-3xl mx-auto">
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <h1 className="text-2xl font-bold mb-4">Estate Inventory Planner</h1>
-          <div className="mb-4">
+          <h1 className="text-2xl font-bold mb-8">Estate Inventory Planner</h1>
+          
+          <div className="mb-8">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
             <input
               type="text"
-              placeholder="Your Name"
+              placeholder="Enter your full name"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
-              className="w-full max-w-sm px-3 py-2 border rounded-md"
+              className="w-full max-w-md px-4 py-2 border rounded-md text-base"
             />
           </div>
           
           <button 
             onClick={() => setShowForm(true)}
-            className="mb-4 bg-blue-500 text-white px-4 py-2 rounded-md flex items-center hover:bg-blue-600"
+            className="mb-6 bg-blue-600 text-white px-4 py-2 rounded-md flex items-center hover:bg-blue-700"
           >
             <PlusCircle className="mr-2 h-4 w-4" />
             Add New Item
           </button>
 
           {showForm && (
-            <div className="bg-gray-50 rounded-lg p-6 mb-6">
-              <div className="space-y-4">
-                <input
-                  placeholder="Item Description"
-                  value={currentItem.description}
-                  onChange={(e) => setCurrentItem({...currentItem, description: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-md"
-                />
+            <div className="bg-white border rounded-lg p-6 mb-8">
+              <div className="space-y-6">
+                <div className="form-group">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Item Description</label>
+                  <input
+                    placeholder="Enter item description"
+                    value={currentItem.description}
+                    onChange={(e) => setCurrentItem({...currentItem, description: e.target.value})}
+                    className="w-full px-4 py-2 border rounded-md text-base"
+                  />
+                </div>
                 
-                <input
-                  type="text"
-                  placeholder="Estimated Value ($)"
-                  value={currentItem.value}
-                  onChange={(e) => {
-                    const formattedValue = formatNumberWithCommas(e.target.value);
-                    setCurrentItem({...currentItem, value: formattedValue});
-                  }}
-                  className="w-full px-3 py-2 border rounded-md"
-                />
+                <div className="form-group">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Estimated Value ($)</label>
+                  <input
+                    type="text"
+                    placeholder="Enter value (e.g., 1,000.00)"
+                    value={currentItem.value}
+                    onChange={(e) => {
+                      const formattedValue = formatNumberWithCommas(e.target.value);
+                      setCurrentItem({...currentItem, value: formattedValue});
+                    }}
+                    className="w-full px-4 py-2 border rounded-md text-base"
+                  />
+                </div>
                 
-                <input
-                  placeholder="Intended Recipient"
-                  value={currentItem.recipient}
-                  onChange={(e) => setCurrentItem({...currentItem, recipient: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-md"
-                />
+                <div className="form-group">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Intended Recipient</label>
+                  <input
+                    placeholder="Enter recipient's name"
+                    value={currentItem.recipient}
+                    onChange={(e) => setCurrentItem({...currentItem, recipient: e.target.value})}
+                    className="w-full px-4 py-2 border rounded-md text-base"
+                  />
+                </div>
                 
-                <textarea
-                  placeholder="Additional Notes"
-                  value={currentItem.notes}
-                  onChange={(e) => setCurrentItem({...currentItem, notes: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-md"
-                  rows={3}
-                />
+                <div className="form-group">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Additional Notes</label>
+                  <textarea
+                    placeholder="Enter any additional notes about the item"
+                    value={currentItem.notes}
+                    onChange={(e) => setCurrentItem({...currentItem, notes: e.target.value})}
+                    rows={4}
+                    className="w-full px-4 py-2 border rounded-md text-base resize-y"
+                  />
+                </div>
                 
-                <div className="space-y-2">
+                <div className="form-group">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Photo Link</label>
                   <div className="flex gap-2">
                     <input
                       type="url"
-                      placeholder="Photo URL (e.g., from Google Drive, Dropbox)"
+                      placeholder="Enter photo URL (e.g., from Google Drive, Dropbox)"
                       value={currentItem.currentPhotoUrl || ''}
                       onChange={(e) => setCurrentItem({
                         ...currentItem,
                         currentPhotoUrl: e.target.value
                       })}
-                      className="flex-1 px-3 py-2 border rounded-md"
+                      className="flex-1 px-4 py-2 border rounded-md text-base"
                     />
                     <button
                       type="button"
@@ -203,49 +211,50 @@ const EstateplannerApp = () => {
                         }
                       }}
                       disabled={!currentItem.currentPhotoUrl}
-                      className="px-4 py-2 border rounded-md bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-3 py-2 border rounded-md bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <PlusCircle className="inline-block h-4 w-4" />
+                      <PlusCircle className="h-5 w-5" />
                     </button>
                   </div>
-                  {currentItem.photos.length > 0 && (
-                    <div className="mt-2 border rounded-md p-3 bg-white">
-                      <p className="text-sm font-medium text-gray-700 mb-2">Added Photo Links:</p>
-                      <div className="space-y-2">
-                        {currentItem.photos.map((url, index) => (
-                          <div key={index} className="flex items-center justify-between p-2 rounded border bg-gray-50">
-                            <a
-                              href={url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-500 hover:underline truncate flex-1 text-sm"
-                            >
-                              {url}
-                            </a>
-                            <button
-                              onClick={() => {
-                                setCurrentItem({
-                                  ...currentItem,
-                                  photos: currentItem.photos.filter((_, i) => i !== index)
-                                });
-                              }}
-                              className="text-red-500 hover:bg-red-50 p-1 rounded ml-2"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
+
+                {currentItem.photos.length > 0 && (
+                  <div className="mt-4 border rounded-md p-4 bg-gray-50">
+                    <div className="text-sm font-medium text-gray-700 mb-3">Added Photo Links:</div>
+                    <div className="space-y-2">
+                      {currentItem.photos.map((url, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 rounded border bg-white">
+                          <a
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:underline truncate flex-1 text-sm"
+                          >
+                            {url}
+                          </a>
+                          <button
+                            onClick={() => {
+                              setCurrentItem({
+                                ...currentItem,
+                                photos: currentItem.photos.filter((_, i) => i !== index)
+                              });
+                            }}
+                            className="text-red-500 hover:bg-red-50 p-2 rounded ml-2"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 
-                <div className="flex gap-2">
+                <div className="flex gap-2 pt-4">
                   <button 
                     onClick={handleAddItem}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                    className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                   >
-                    <Save className="inline-block mr-2 h-4 w-4" />
+                    <Save className="h-4 w-4 mr-2" />
                     {editingId ? 'Update Item' : 'Save Item'}
                   </button>
                   <button 
@@ -316,7 +325,7 @@ const EstateplannerApp = () => {
                                   href={url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="block text-xs text-blue-500 hover:underline"
+                                  className="block text-xs text-blue-600 hover:underline"
                                 >
                                   {url}
                                 </a>
@@ -333,9 +342,9 @@ const EstateplannerApp = () => {
 
               <button 
                 onClick={exportToCSV} 
-                className="mt-6 px-4 py-2 border rounded-md hover:bg-gray-50"
+                className="mt-6 px-4 py-2 border rounded-md hover:bg-gray-50 flex items-center"
               >
-                <Download className="inline-block mr-2 h-4 w-4" />
+                <Download className="h-4 w-4 mr-2" />
                 Export to CSV
               </button>
             </>
