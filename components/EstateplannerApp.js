@@ -114,32 +114,34 @@ const EstateplannerApp = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
+    <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-3xl mx-auto">
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div className="bg-white rounded-lg shadow-md p-8 mb-6">
           <h1 className="text-2xl font-bold mb-8">Estate Inventory Planner</h1>
           
           <div className="mb-8">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Your Name
+            </label>
             <input
               type="text"
               placeholder="Enter your full name"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
-              className="w-full max-w-md px-4 py-2 border rounded-md text-base"
+              className="w-full max-w-md px-4 py-3 border rounded-md text-base"
             />
           </div>
           
           <button 
             onClick={() => setShowForm(true)}
-            className="mb-6 bg-blue-600 text-white px-4 py-2 rounded-md flex items-center hover:bg-blue-700"
+            className="mb-8 bg-blue-600 text-white px-4 py-3 rounded-md flex items-center hover:bg-blue-700"
           >
             <PlusCircle className="mr-2 h-4 w-4" />
             Add New Item
           </button>
 
           {showForm && (
-            <div className="bg-white border rounded-lg p-8 mb-8">
+            <div className="bg-white border-2 rounded-lg p-8 mb-8 shadow-sm">
               <div className="space-y-8">
                 <div className="form-group">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -262,7 +264,7 @@ const EstateplannerApp = () => {
                 <div className="flex gap-2 pt-4">
                   <button 
                     onClick={handleAddItem}
-                    className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    className="flex items-center px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                   >
                     <Save className="h-4 w-4 mr-2" />
                     {editingId ? 'Update Item' : 'Save Item'}
@@ -280,7 +282,7 @@ const EstateplannerApp = () => {
                         currentPhotoUrl: ''
                       });
                     }}
-                    className="px-4 py-2 border rounded-md hover:bg-gray-50"
+                    className="px-4 py-3 border rounded-md hover:bg-gray-50"
                   >
                     Cancel
                   </button>
@@ -291,9 +293,9 @@ const EstateplannerApp = () => {
 
           {items.length > 0 && (
             <>
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {items.map(item => (
-                  <div key={item.id} className="bg-white border rounded-lg p-6">
+                  <div key={item.id} className="bg-white border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <h3 className="text-lg font-semibold">{item.description}</h3>
@@ -363,7 +365,7 @@ const EstateplannerApp = () => {
 
               <button 
                 onClick={exportToCSV} 
-                className="mt-8 px-4 py-2 border rounded-md hover:bg-gray-50 flex items-center"
+                className="mt-8 px-4 py-3 border rounded-md hover:bg-gray-50 flex items-center"
               >
                 <Download className="h-4 w-4 mr-2" />
                 Export to CSV
