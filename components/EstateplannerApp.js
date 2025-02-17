@@ -139,20 +139,24 @@ const EstateplannerApp = () => {
           </button>
 
           {showForm && (
-            <div className="bg-white border rounded-lg p-6 mb-8">
-              <div className="space-y-6">
+            <div className="bg-white border rounded-lg p-8 mb-8">
+              <div className="space-y-8">
                 <div className="form-group">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Item Description</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Item Description
+                  </label>
                   <input
                     placeholder="Enter item description"
                     value={currentItem.description}
                     onChange={(e) => setCurrentItem({...currentItem, description: e.target.value})}
-                    className="w-full px-4 py-2 border rounded-md text-base"
+                    className="w-full px-4 py-3 border rounded-md text-base"
                   />
                 </div>
                 
                 <div className="form-group">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Estimated Value ($)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Estimated Value ($)
+                  </label>
                   <input
                     type="text"
                     placeholder="Enter value (e.g., 1,000.00)"
@@ -161,33 +165,39 @@ const EstateplannerApp = () => {
                       const formattedValue = formatNumberWithCommas(e.target.value);
                       setCurrentItem({...currentItem, value: formattedValue});
                     }}
-                    className="w-full px-4 py-2 border rounded-md text-base"
+                    className="w-full px-4 py-3 border rounded-md text-base"
                   />
                 </div>
                 
                 <div className="form-group">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Intended Recipient</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Intended Recipient
+                  </label>
                   <input
                     placeholder="Enter recipient's name"
                     value={currentItem.recipient}
                     onChange={(e) => setCurrentItem({...currentItem, recipient: e.target.value})}
-                    className="w-full px-4 py-2 border rounded-md text-base"
+                    className="w-full px-4 py-3 border rounded-md text-base"
                   />
                 </div>
                 
                 <div className="form-group">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Additional Notes</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Additional Notes
+                  </label>
                   <textarea
                     placeholder="Enter any additional notes about the item"
                     value={currentItem.notes}
                     onChange={(e) => setCurrentItem({...currentItem, notes: e.target.value})}
                     rows={4}
-                    className="w-full px-4 py-2 border rounded-md text-base resize-y"
+                    className="w-full px-4 py-3 border rounded-md text-base resize-y"
                   />
                 </div>
                 
                 <div className="form-group">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Photo Link</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Photo Link
+                  </label>
                   <div className="flex gap-2">
                     <input
                       type="url"
@@ -197,7 +207,7 @@ const EstateplannerApp = () => {
                         ...currentItem,
                         currentPhotoUrl: e.target.value
                       })}
-                      className="flex-1 px-4 py-2 border rounded-md text-base"
+                      className="flex-1 px-4 py-3 border rounded-md text-base"
                     />
                     <button
                       type="button"
@@ -211,7 +221,7 @@ const EstateplannerApp = () => {
                         }
                       }}
                       disabled={!currentItem.currentPhotoUrl}
-                      className="px-3 py-2 border rounded-md bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-4 py-3 border rounded-md bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <PlusCircle className="h-5 w-5" />
                     </button>
@@ -281,43 +291,51 @@ const EstateplannerApp = () => {
 
           {items.length > 0 && (
             <>
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {items.map(item => (
-                  <div key={item.id} className="bg-white border rounded-lg p-4">
-                    <div className="flex gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 justify-between">
-                          <div className="flex items-center gap-2">
-                            <h3 className="font-semibold">{item.description}</h3>
-                            {item.photos.length > 0 && (
-                              <span className="text-xs text-gray-500">
-                                ({item.photos.length} photo{item.photos.length !== 1 ? 's' : ''})
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex gap-2">
-                            <button 
-                              onClick={() => handleEdit(item)}
-                              className="p-1 hover:bg-gray-100 rounded"
-                            >
-                              <Edit className="h-4 w-4" />
-                            </button>
-                            <button 
-                              onClick={() => handleDeleteItem(item.id)}
-                              className="p-1 text-red-500 hover:bg-red-50 rounded"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          </div>
+                  <div key={item.id} className="bg-white border rounded-lg p-6">
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-semibold">{item.description}</h3>
+                        <div className="flex gap-2">
+                          <button 
+                            onClick={() => handleEdit(item)}
+                            className="p-2 hover:bg-gray-100 rounded"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </button>
+                          <button 
+                            onClick={() => handleDeleteItem(item.id)}
+                            className="p-2 text-red-500 hover:bg-red-50 rounded"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
                         </div>
-                        <p className="text-sm text-gray-600">Value: ${formatNumberWithCommas(item.value)}</p>
-                        <p className="text-sm text-gray-600">Recipient: {item.recipient}</p>
+                      </div>
+
+                      <div className="space-y-2">
+                        <p className="text-base">
+                          <span className="text-gray-600">Value: </span>
+                          <span className="font-medium">${formatNumberWithCommas(item.value)}</span>
+                        </p>
+                        
+                        <p className="text-base">
+                          <span className="text-gray-600">Recipient: </span>
+                          <span className="font-medium">{item.recipient}</span>
+                        </p>
+
                         {item.notes && (
-                          <p className="text-sm text-gray-600 mt-2">{item.notes}</p>
+                          <div className="pt-2">
+                            <p className="text-gray-600">Notes:</p>
+                            <p className="text-base mt-1">{item.notes}</p>
+                          </div>
                         )}
+
                         {item.photos.length > 0 && (
-                          <div className="mt-2">
-                            <div className="text-xs text-gray-500">Photo Links:</div>
+                          <div className="pt-2">
+                            <p className="text-gray-600">
+                              Photos ({item.photos.length}):
+                            </p>
                             <div className="mt-1 space-y-1">
                               {item.photos.map((url, index) => (
                                 <a
@@ -325,7 +343,7 @@ const EstateplannerApp = () => {
                                   href={url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="block text-xs text-blue-600 hover:underline"
+                                  className="block text-blue-600 hover:underline"
                                 >
                                   {url}
                                 </a>
@@ -333,7 +351,10 @@ const EstateplannerApp = () => {
                             </div>
                           </div>
                         )}
-                        <p className="text-xs text-gray-400 mt-2">Added: {item.dateAdded}</p>
+
+                        <p className="text-sm text-gray-400 pt-2">
+                          Added: {item.dateAdded}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -342,7 +363,7 @@ const EstateplannerApp = () => {
 
               <button 
                 onClick={exportToCSV} 
-                className="mt-6 px-4 py-2 border rounded-md hover:bg-gray-50 flex items-center"
+                className="mt-8 px-4 py-2 border rounded-md hover:bg-gray-50 flex items-center"
               >
                 <Download className="h-4 w-4 mr-2" />
                 Export to CSV
