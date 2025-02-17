@@ -116,7 +116,7 @@ const EstateplannerApp = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-3xl mx-auto">
-        <div className="bg-white rounded-lg shadow-md p-8 mb-6">
+        <div className="bg-white rounded-lg shadow-lg p-8">
           <h1 className="text-2xl font-bold mb-8">Estate Inventory Planner</h1>
           
           <div className="mb-8">
@@ -134,16 +134,22 @@ const EstateplannerApp = () => {
           
           <button 
             onClick={() => setShowForm(true)}
-            className="mb-8 bg-blue-600 text-white px-4 py-3 rounded-md flex items-center hover:bg-blue-700"
+            className="mb-8 bg-blue-600 text-white px-6 py-3 rounded-md flex items-center hover:bg-blue-700"
           >
             <PlusCircle className="mr-2 h-4 w-4" />
             Add New Item
           </button>
 
           {showForm && (
-            <div className="bg-white border-2 rounded-lg p-8 mb-8 shadow-sm">
-              <div className="space-y-8">
-                <div className="form-group">
+            <div className="bg-gray-50 border rounded-lg shadow-md mb-8">
+              <div className="p-6 border-b bg-white rounded-t-lg">
+                <h2 className="text-xl font-semibold text-gray-800">
+                  {editingId ? 'Edit Item' : 'Add New Item'}
+                </h2>
+              </div>
+              
+              <div className="p-8 space-y-6">
+                <div className="bg-white p-6 rounded-lg border shadow-sm">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Item Description
                   </label>
@@ -155,7 +161,7 @@ const EstateplannerApp = () => {
                   />
                 </div>
                 
-                <div className="form-group">
+                <div className="bg-white p-6 rounded-lg border shadow-sm">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Estimated Value ($)
                   </label>
@@ -171,7 +177,7 @@ const EstateplannerApp = () => {
                   />
                 </div>
                 
-                <div className="form-group">
+                <div className="bg-white p-6 rounded-lg border shadow-sm">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Intended Recipient
                   </label>
@@ -183,7 +189,7 @@ const EstateplannerApp = () => {
                   />
                 </div>
                 
-                <div className="form-group">
+                <div className="bg-white p-6 rounded-lg border shadow-sm">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Additional Notes
                   </label>
@@ -196,7 +202,7 @@ const EstateplannerApp = () => {
                   />
                 </div>
                 
-                <div className="form-group">
+                <div className="bg-white p-6 rounded-lg border shadow-sm">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Photo Link
                   </label>
@@ -228,43 +234,43 @@ const EstateplannerApp = () => {
                       <PlusCircle className="h-5 w-5" />
                     </button>
                   </div>
-                </div>
 
-                {currentItem.photos.length > 0 && (
-                  <div className="mt-4 border rounded-md p-4 bg-gray-50">
-                    <div className="text-sm font-medium text-gray-700 mb-3">Added Photo Links:</div>
-                    <div className="space-y-2">
-                      {currentItem.photos.map((url, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 rounded border bg-white">
-                          <a
-                            href={url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline truncate flex-1 text-sm"
-                          >
-                            {url}
-                          </a>
-                          <button
-                            onClick={() => {
-                              setCurrentItem({
-                                ...currentItem,
-                                photos: currentItem.photos.filter((_, i) => i !== index)
-                              });
-                            }}
-                            className="text-red-500 hover:bg-red-50 p-2 rounded ml-2"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
-                        </div>
-                      ))}
+                  {currentItem.photos.length > 0 && (
+                    <div className="mt-4 border rounded-md p-4 bg-gray-50">
+                      <div className="text-sm font-medium text-gray-700 mb-3">Added Photo Links:</div>
+                      <div className="space-y-2">
+                        {currentItem.photos.map((url, index) => (
+                          <div key={index} className="flex items-center justify-between p-3 rounded border bg-white">
+                            <a
+                              href={url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline truncate flex-1 text-sm"
+                            >
+                              {url}
+                            </a>
+                            <button
+                              onClick={() => {
+                                setCurrentItem({
+                                  ...currentItem,
+                                  photos: currentItem.photos.filter((_, i) => i !== index)
+                                });
+                              }}
+                              className="text-red-500 hover:bg-red-50 p-2 rounded ml-2"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
                 
                 <div className="flex gap-2 pt-4">
                   <button 
                     onClick={handleAddItem}
-                    className="flex items-center px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                   >
                     <Save className="h-4 w-4 mr-2" />
                     {editingId ? 'Update Item' : 'Save Item'}
@@ -282,7 +288,7 @@ const EstateplannerApp = () => {
                         currentPhotoUrl: ''
                       });
                     }}
-                    className="px-4 py-3 border rounded-md hover:bg-gray-50"
+                    className="px-6 py-3 border rounded-md hover:bg-gray-50"
                   >
                     Cancel
                   </button>
@@ -293,7 +299,7 @@ const EstateplannerApp = () => {
 
           {items.length > 0 && (
             <>
-              <div className="space-y-8">
+              <div className="space-y-6">
                 {items.map(item => (
                   <div key={item.id} className="bg-white border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
                     <div className="space-y-4">
@@ -365,7 +371,7 @@ const EstateplannerApp = () => {
 
               <button 
                 onClick={exportToCSV} 
-                className="mt-8 px-4 py-3 border rounded-md hover:bg-gray-50 flex items-center"
+                className="mt-8 px-6 py-3 border rounded-md hover:bg-gray-50 flex items-center"
               >
                 <Download className="h-4 w-4 mr-2" />
                 Export to CSV
@@ -375,7 +381,3 @@ const EstateplannerApp = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-export default EstateplannerApp;
