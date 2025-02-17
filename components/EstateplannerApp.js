@@ -4,26 +4,119 @@ import React, { useState } from 'react';
 import { PlusCircle, Download, Save, Trash2, Edit } from 'lucide-react';
 
 const EstateplannerApp = () => {
-  // ... [Previous code remains the same until the return statement] ...
+  const [items, setItems] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [currentItem, setCurrentItem] = useState({
+    description: '',
+    value: '',
+    recipient: '',
+    notes: '',
+    photos: [],
+    currentPhotoUrl: ''
+  });
+
+  // Format number with commas and decimal points
+  const formatNumberWithCommas = (value) => {
+    const cleanValue = value.replace(/[^0-9.]/g, '');
+    const parts = cleanValue.split('.');
+    const wholePart = parts[0];
+    const decimalPart = parts.length > 1 ? '.' + parts[1].slice(0, 2) : '';
+    const wholeWithCommas = wholePart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return wholeWithCommas + decimalPart;
+  };
+
+  const handleAddItem = () => {
+    if (currentItem.description && currentItem.value) {
+      const photos = currentItem.currentPhotoUrl 
+        ? [...currentItem.photos, currentItem.currentPhotoUrl]
+        : currentItem.photos;
+        
+      const cleanValue = currentItem.value.replace(/,/g, '');
+      
+      if (editingId) {
+        setItems(items.map(item => 
+          item.id === editingId ? 
+          { ...item, ...currentItem, value: cleanValue, photos } : 
+          item
+        ));
+        setEditingId(null);
+      } else {
+        setItems([...items, { 
+          ...currentItem, 
+          id: Date.now(),
+          value: cleanValue,
+          photos,
+          dateAdded: new Date().toLocaleDateString() 
+        }]);
+      }
+      setCurrentItem({
+        description: '',
+        value: '',
+        recipient: '',
+        notes: '',
+        photos: [],
+        currentPhotoUrl: ''
+      });
+      setShowForm(false);
+    }
+  };
+
+  const handleEdit = (item) => {
+    setCurrentItem({
+      ...item,
+      value: formatNumberWithCommas(item.value)
+    });
+    setEditingId(item.id);
+    setShowForm(true);
+  };
+
+  const handleDeleteItem = (id) => {
+    setItems(items.filter(item => item.id !== id));
+  };
+
+  const exportToCSV = () => {
+    try {
+      const csvRows = [
+        ['Description', 'Value ($)', 'Recipient', 'Notes', 'Date Added', 'Photo URLs'],
+        ...items.map(item => [
+          item.description,
+          item.value.replace(/,/g, ''),
+          item.recipient,
+          item.notes,
+          item.dateAdded,
+          item.photos.join(' ; ')
+        ])
+      ];
+
+      const processedRows = csvRows.map(row =>
+        row.map(field => {
+          const stringField = String(field || '');
+          if (stringField.includes('"') || stringField.includes(',') || stringField.includes('\n')) {
+            return `"${stringField.replace(/"/g, '""')}"`;
+          }
+          return stringField;
+        }).join(',')
+      );
+
+      const csvContent = processedRows.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `estate-inventory-${new Date().toLocaleDateString().replace(/\//g, '-')}.csv`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    } catch (error) {
+      console.error('Error exporting CSV:', error);
+      alert('There was an error exporting your data. Please try again.');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-3xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg p-8">
           <h1 className="text-2xl font-bold mb-8">Estate Inventory Planner</h1>
-          
-          <div className="mb-8">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Your Name
-            </label>
-            <input
-              type="text"
-              placeholder="Enter your full name"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-              className="w-full max-w-md px-4 py-3 border rounded-md text-base"
-            />
-          </div>
           
           <button 
             onClick={() => setShowForm(true)}
